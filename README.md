@@ -1,2 +1,368 @@
-# Electric-tiller-power-machine
-Electric tiller power machine
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Electric Power Tiller — Demo</title>
+
+  <!-- Simple modern styling (no frameworks required) -->
+  <style>
+    :root{
+      --bg:#f7fcf6;
+      --card:#ffffff;
+      --accent:#198754;
+      --muted:#6b7280;
+      --glass: rgba(255,255,255,0.7);
+      --danger:#dc3545;
+      --radius:16px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; background: linear-gradient(180deg,var(--bg),#ffffff); color:#0f172a; -webkit-font-smoothing:antialiased}
+    .container{max-width:1100px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    h1{margin:0;font-size:1.6rem}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:0.95rem}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:20px;
+      margin-top:22px;
+    }
+
+    /* mobile stack */
+    @media (max-width:880px){
+      .grid{grid-template-columns:1fr;}
+    }
+
+    /* hero card */
+    .card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:0 6px 18px rgba(12, 18, 20, 0.06)}
+    .hero{display:flex;gap:16px;align-items:flex-start}
+    .hero img{width:48%;border-radius:12px;object-fit:cover;max-height:260px}
+    .hero .col{flex:1}
+
+    .badges{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .badge{background:#eefaf0;color:var(--accent);padding:6px 10px;border-radius:999px;font-size:0.85rem}
+
+    /* specs table */
+    table.specs{width:100%;border-collapse:collapse;margin-top:10px}
+    table.specs td{padding:6px 8px;border-bottom:1px dashed #eef2e9;color:var(--muted);font-size:0.95rem}
+    table.specs td.value{color:#07122a;font-weight:600}
+
+    /* battery panel */
+    .battery-panel h3{margin:0 0 8px 0}
+    .field{margin-top:10px}
+    label{display:block;font-size:0.85rem;color:var(--muted);margin-bottom:6px}
+    input[type="number"]{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #e6eee6;font-size:0.95rem}
+    .row{display:flex;gap:8px}
+    .btn{display:inline-block;padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+    .btn.primary{background:var(--accent);color:white}
+    .btn.ghost{background:transparent;border:1px solid #e6eee6;color:#0f172a}
+    .btn.warn{background:var(--danger);color:white}
+
+    .meter{height:14px;background:#e9f2ea;border-radius:999px;overflow:hidden;margin-top:8px}
+    .meter > span{display:block;height:100%;width:0%;background:linear-gradient(90deg,#20c997,#0ca678);transition:width 320ms linear}
+
+    .status{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:0.95rem;color:var(--muted)}
+    .small{font-size:0.9rem;color:var(--muted)}
+    .center{display:flex;gap:8px;align-items:center}
+
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:0.85rem}
+
+    /* runtime readout */
+    .readout{background:linear-gradient(180deg,#fbfff9,#f2fff2);padding:10px;border-radius:10px;margin-top:12px;border:1px solid #ecf6ec}
+    .readout .big{font-size:1.45rem;font-weight:700}
+    .muted{color:var(--muted);font-size:0.9rem}
+    .controls{display:flex;gap:8px;margin-top:10px}
+
+    /* small screens tweak */
+    @media (max-width:520px){
+      .hero img{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Electric Power Tiller — Demo Page</h1>
+        <p class="lead">Prototype page for an electric tiller (battery-powered). Live runtime simulator included.</p>
+      </div>
+      <div class="center small">
+        <div class="badge">Swappable battery</div>
+        <div class="badge">Low noise</div>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- Left: hero and specs -->
+      <section class="card">
+        <div class="hero">
+          <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1400&auto=format&fit=crop" alt="electric tiller">
+          <div class="col">
+            <h2 style="margin:0 0 6px 0">AgriTiller E-200</h2>
+            <p class="small">A compact, battery-powered power tiller ideal for small farms, orchards and gardens. Designed for low maintenance, modular powertrain and remote telemetry-ready controls.</p>
+
+            <div class="badges" style="margin-top:12px">
+              <div class="badge">IP65 controllers</div>
+              <div class="badge">Hot-swap packs</div>
+              <div class="badge">CANbus telemetry</div>
+            </div>
+
+            <table class="specs" aria-label="technical specifications">
+              <tbody>
+                <tr><td>Model</td><td class="value">AgriTiller E-200</td></tr>
+                <tr><td>Weight</td><td class="value">145 kg</td></tr>
+                <tr><td>Max forward speed</td><td class="value">6 km/h</td></tr>
+                <tr><td>Tilling width</td><td class="value">55 - 85 cm (adjustable)</td></tr>
+                <tr><td>Charge time (to 80%)</td><td class="value">~3.5 hours</td></tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top:12px">
+              <button class="btn primary" id="downloadSpecs">Download spec (JSON)</button>
+              <button class="btn ghost" id="requestDemo">Request demo</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: battery simulation -->
+      <aside class="card battery-panel">
+        <h3>Battery & Runtime Simulator</h3>
+
+        <div class="field">
+          <label for="voltage">Battery nominal voltage (V)</label>
+          <input id="voltage" type="number" min="12" step="1" value="48" />
+        </div>
+
+        <div class="field">
+          <label for="capacity">Battery capacity (Ah)</label>
+          <input id="capacity" type="number" min="10" step="1" value="120" />
+        </div>
+
+        <div class="field">
+          <label for="power">Estimated average power draw while tilling (W)</label>
+          <input id="power" type="number" min="100" step="10" value="1500" />
+        </div>
+
+        <div class="field">
+          <label>Battery state</label>
+          <div class="status">
+            <div>Charge <strong id="percentLabel">85%</strong></div>
+            <div class="small" id="energyLabel">-- Wh available</div>
+          </div>
+          <div class="meter" aria-hidden="true"><span id="meterBar" style="width:85%"></span></div>
+        </div>
+
+        <div class="readout">
+          <div class="muted">Nominal energy</div>
+          <div id="nominalEnergy" class="big">5,760 Wh</div>
+
+          <div style="display:flex;gap:10px;margin-top:8px;align-items:center;justify-content:space-between">
+            <div>
+              <div class="muted">Available energy</div>
+              <div id="availableEnergy" style="font-weight:700">4,896 Wh</div>
+            </div>
+            <div style="text-align:right">
+              <div class="muted">Est. remaining runtime</div>
+              <div id="runtime" style="font-weight:700">3.26 h</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn primary" id="startBtn">Start field run</button>
+          <button class="btn ghost" id="stopBtn" disabled>Stop</button>
+          <button class="btn" id="fullCharge" title="Set to 100%">Full charge</button>
+        </div>
+
+        <div style="margin-top:8px" class="small">
+          <strong>Note:</strong> Runtime is an estimate based on inputs. Terrain, implement load, and duty cycle change real-world results.
+        </div>
+      </aside>
+
+      <!-- Full-width: additional details -->
+      <section class="card" style="grid-column: 1 / -1; margin-top:6px">
+        <h3 style="margin:0 0 8px 0">Design & Integration</h3>
+        <p class="small">This tiller uses modular battery packs (48V / 120Ah in this demo), IP65 controllers and is designed to accept implements like rotavator blades, furrowers and a lightweight seed spreader. Replaceable battery modules let you quickly swap a depleted pack for a charged spare to keep working during long days.</p>
+
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <div style="flex:1;min-width:240px">
+            <h4 style="margin:4px 0">Electrical basics</h4>
+            <p class="small">Nominal energy (Wh) = <code>Voltage × Capacity(Ah)</code>. If you draw X watts, the energy consumed per second is X/3600 Wh. The simulator uses that math to convert power draw into battery percentage decline.</p>
+          </div>
+
+          <div style="flex:1;min-width:240px">
+            <h4 style="margin:4px 0">Telemetry & safety</h4>
+            <p class="small">For a production system add a BMS (battery management system) that reports cell voltages, temperatures, current, and supports safe cutoffs. Consider CAN or MQTT for telemetry and remote diagnostics.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      © <span id="year"></span> AgriTech Prototype — electric tiller demo
+    </footer>
+  </div>
+
+  <!-- JS: simulator logic -->
+  <script>
+    // Helper: format numbers with thousands separators
+    function fmt(n){
+      return Math.round(n).toLocaleString();
+    }
+
+    // Elements
+    const voltageEl = document.getElementById('voltage');
+    const capacityEl = document.getElementById('capacity');
+    const powerEl = document.getElementById('power');
+    const percentLabel = document.getElementById('percentLabel');
+    const meterBar = document.getElementById('meterBar');
+    const nominalEnergyEl = document.getElementById('nominalEnergy');
+    const availableEnergyEl = document.getElementById('availableEnergy');
+    const runtimeEl = document.getElementById('runtime');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const fullChargeBtn = document.getElementById('fullCharge');
+    const downloadSpecs = document.getElementById('downloadSpecs');
+    const requestDemo = document.getElementById('requestDemo');
+
+    // State
+    let batteryPercent = 85; // start at 85%
+    let simInterval = null;
+
+    // Compute derived values and update UI
+    function updateUI(){
+      // Parse user inputs
+      const V = Number(voltageEl.value) || 0;           // volts
+      const Ah = Number(capacityEl.value) || 0;         // amp-hours
+      const W = Number(powerEl.value) || 0;            // watts
+
+      // Nominal energy in Wh
+      // nominalEnergyWh = V * Ah
+      const nominalEnergyWh = V * Ah;
+
+      // Available energy = batteryPercent/100 * nominalEnergyWh
+      const availableEnergyWh = (batteryPercent / 100) * nominalEnergyWh;
+
+      // Estimated runtime in hours = availableEnergyWh / W  (if W>0)
+      const estimatedHours = W > 0 ? (availableEnergyWh / W) : Infinity;
+
+      // Update displays
+      nominalEnergyEl.textContent = fmt(nominalEnergyWh) + ' Wh';
+      availableEnergyEl.textContent = fmt(availableEnergyWh) + ' Wh';
+      runtimeEl.textContent = (estimatedHours === Infinity) ? '—' : (Math.round(estimatedHours * 100) / 100) + ' h';
+
+      percentLabel.textContent = Math.round(batteryPercent) + '%';
+      meterBar.style.width = Math.max(0, Math.min(100, batteryPercent)) + '%';
+
+      // color change depending on level
+      if (batteryPercent > 60) {
+        meterBar.style.background = 'linear-gradient(90deg,#20c997,#0ca678)';
+      } else if (batteryPercent > 20) {
+        meterBar.style.background = 'linear-gradient(90deg,#f6c244,#f59e0b)';
+      } else {
+        meterBar.style.background = 'linear-gradient(90deg,#ff6b6b,#dc3545)';
+      }
+    }
+
+    // Simulation tick: decreases battery percent according to power draw and nominal energy
+    // Energy consumed per second (Wh / s) = powerW / 3600
+    // Percent drop per second = (powerW / 3600) / nominalEnergyWh * 100
+    function simulationStep(){
+      const V = Number(voltageEl.value) || 0;
+      const Ah = Number(capacityEl.value) || 0;
+      const W = Number(powerEl.value) || 0;
+
+      const nominalEnergyWh = V * Ah;
+      if (nominalEnergyWh <= 0 || W <= 0) return;
+
+      // Compute percent drop per second:
+      // percent_per_second = (W / 3600) / nominalEnergyWh * 100
+      // = W * 100 / (3600 * nominalEnergyWh)
+      const percentPerSecond = (W * 100) / (3600 * nominalEnergyWh);
+
+      // Decrease battery percent
+      batteryPercent = Math.max(0, batteryPercent - percentPerSecond);
+
+      // Stop simulation when battery depleted
+      if (batteryPercent <= 0.01) {
+        batteryPercent = 0;
+        stopSimulation();
+        alert('Battery depleted — simulation stopped.');
+      }
+
+      updateUI();
+    }
+
+    // Start the simulation
+    function startSimulation(){
+      if (simInterval) return;
+      simInterval = setInterval(simulationStep, 1000); // tick every second
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+    }
+
+    // Stop the simulation
+    function stopSimulation(){
+      if (simInterval) { clearInterval(simInterval); simInterval = null; }
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    }
+
+    // Set to full charge
+    function fullCharge(){
+      batteryPercent = 100;
+      updateUI();
+    }
+
+    // Download specs as JSON file
+    function downloadSpecFile(){
+      const spec = {
+        model: 'AgriTiller E-200',
+        nominalVoltage: Number(voltageEl.value),
+        capacityAh: Number(capacityEl.value),
+        energyWh: Number(voltageEl.value) * Number(capacityEl.value),
+        typicalPowerDrawW: Number(powerEl.value),
+        notes: 'Prototype spec generated from demo page'
+      };
+      const blob = new Blob([JSON.stringify(spec, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'AgriTiller-E200-spec.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // Demo request placeholder
+    function demoRequest(){
+      alert('Demo request received. In a real site this would send your contact details to the sales team.');
+    }
+
+    // Wire events
+    [voltageEl, capacityEl, powerEl].forEach(el => el.addEventListener('input', updateUI));
+    startBtn.addEventListener('click', startSimulation);
+    stopBtn.addEventListener('click', stopSimulation);
+    fullChargeBtn.addEventListener('click', fullCharge);
+    downloadSpecs.addEventListener('click', downloadSpecFile);
+    requestDemo.addEventListener('click', demoRequest);
+
+    // set year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // init UI
+    updateUI();
+
+    // Accessibility: stop simulation when page hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { stopSimulation(); }
+    });
+  </script>
+</body>
+</html>
